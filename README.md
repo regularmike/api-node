@@ -1,59 +1,134 @@
-Ordr.in Javascript API
-======================
+# Ordr.in Node Library
 
-A Javascript wrapper for the Restaurant, User, and Order APIs provided by Ordr.in.
+## About
+A node library for the ordr.in API  
+See full API documantation at <a href="http://ordr.in/developers">http://ordr.in/developers</a>
 
-Usage
------
-
-        Ordrin.initialize(api_developer_key, {site_domain}, [enable JSONP with 1 or true]);
-	// site_domain should be configured as an object, to use test api servers:
-        //   { restaurant : 'https://r-test.ordr.in',
-        //     user       : 'https://u-test.ordr.in',
-        //     ordr       : 'https://o-test.ordr.in'
-        //   }
-        // JSONP should be typically enabled, unless this is going to run as a phonegap app or
-        // if you are setting up a reverse proxy
-        
-        var time = new Date(); // uses Javascript's built-in Date object
-        time.setASAP(); // overrides Date properties to ASAP
-        var place = new Address(street, street2 [optional], city, zip, state [optional], phone [optional]);
-        Address.checkZip();
-        Address.checkPhone();
-        Address.validate() // runs all checks
-        
-        var subtotal = new Money("100");
-        var tip = new Money("15");
-        
-	// Restaurant API
-        Ordrin.r.deliveryList(time, place, callbackFunction);
-        Ordrin.r.deliveryCheck(restaurantID, time, place, callbackFunction);
-        Ordrin.r.deliveryFee(restaurantID, subtotal, tip, time, place, callbackFunction);
-        Ordrin.r.details(restaurantID, callbackFunction);
-
-	// User API
-        Ordrin.u.makeAcct(email, password, firstName, lastName, callbackFunction); 
-        Ordrin.u.setCurrAcct(email, password, callbackFunction); // set user account currently in use or "logged in"
-        Ordrin.u.getAcct(callbackFunction); // get details on current user
-        Ordrin.u.getAddress(addressNickname, callbackFunction);
-        Ordrin.u.updateAddress(address, callbackFunction); // Address must be passed using API's built-in Address object
-        Ordrin.u.deleteAddress(addressNickname, callbackFunction);
-        Ordrin.u.getCard(cardNickname, callbackFunction);
-        Ordrin.u.updateCard(cardNickname, nameOnCard, cardNumber, cardSecurityCode, expiryMonth, expiryYear, billAddress, callbackFunction);
-        Ordrin.u.deleteCard(cardNickname, callbackFunction);
-        Ordrin.u.orderHistory(orderID, callbackFunction); // if orderID left blank, all previous orders returned; ID returns specific details of order
-        Ordrin.u.updatePassword(newPassword, callbackFunction);
-	
-	// Order API
-	Ordrin.o.submit(restaurantID, tray, tip, time, email, firstName, lastName, deliveryAddress, nameOnCard, cardNumber, cardSecurityCode, expiry, billAddress)
+## Installation
+The simplest way to install is with npm:  
+<pre>
+  npm install ordrin-api
+</pre>
 
 
-Notes
------ 
-If JSONP is being used, the name of the callback function must be passed in quotation marks as a string and without parentheses.
-In the case of a reverse origin proxy being used the callback function's name is not passed as a string; it is passed as a reference and also without parentheses.
-		Ordrin.r.deliveryList(time, place, "callback_function");  // JSONP
-		Ordrin.r.deliveryList(time, place, callback_function); // reverse origin proxy present
+## Usage  
 
-Take a peek inside src/demo/test.html for usage.
-API docs available at http://www.ordr.in/developers/api.
+### Initialization
+<pre>
+  var ordrinApi = require("ordrin-api");
+
+  var ordrin = ordrinApi.init({
+    apiKey: "YOUR-ORDRIN-API-KEY",
+    restaurantUrl: "https://r-test.ordr.in/",
+    userUrl: "https://u-test.ordr.in/",
+    orderUrl: "https://o-test.ordr.in/"
+  });
+</pre>
+
+### Callbacks
+Because node is async every function call you make to the ordrin api includes a callback. This will be called when the api has finished your request. The format of this callback is always the same.  
+It takes two parameters: error and data.  
+If there's no error than error will be false, otherwise it will be an object.  
+Data is an object containing the data returned from the ordr.in api as described in the API documentation located at <a href="http://ordr.in/developers">http://ordr.in/developers</a>.
+
+Example function callback:  
+<pre>
+  var callback = function(error, data){
+    if (error){
+      console.error("Ordr.in API error", error.msg);
+    }else{
+      // program logic
+    }
+  }
+</pre>
+
+### Data Structures
+The following classes are part of the library and are used whenever there is an address, credit card, user, tray item, or tray.  
+They are both returned by and should be passed into every one of the library's function calls.
+
+<pre>
+  Address = {
+    addr: String,
+    city: String,
+    state: String,
+    zip: Number,
+    phone: String,
+    addr2: String
+  }
+
+  CreditCard = {
+    name: String,
+    expiryMonth: Number,
+    expiryYear: Number,
+    billAddress: String, // just an address string, NOT an object of the above address class
+    number: Number,
+    cvc: Number
+  }
+
+  User = {
+    email: String,
+    password: String
+  }
+
+  trayItem = {
+    itemId: Number,
+    quantity: Number,
+    options: Array // array of option ids
+  }
+
+  tray = {
+    items: Array // array of trayItem objects of the above class
+  }
+</pre>
+You can create an object of one of these classes like so:
+<pre>
+  var user = new Ordrin.User("example@example.com", "password");
+</pre>
+
+
+### Restaurant API
+<pre>
+  ordrin.restaurant.getDeliveryList(dateTime, address, callback);
+  
+  ordrin.restaurant.getDeliveryCheck(restaurantId, dateTime, address, callback);
+
+  ordrin.restaurant.getFee(restaurantId, subtotal, tip, dateTime, address, callback);
+
+  ordrin.restaurant.getDetails(restuarantId, callback);
+</pre>
+
+### User API
+<pre>
+  ordrin.user.getUser(user, callback);
+
+  ordrin.user.createUser(user, firstName, lastName, callback);
+
+  ordrin.user.getAllAddresses(user, callback);
+
+  ordrin.user.getAddress(user, addressName, callback);
+
+  ordrin.user.setAddress(user, addressName, address, callback);
+
+  ordrin.user.removeAddress(user, addressName, callback);
+
+  ordrin.user.getAllCreditCards(user, callback);
+
+  ordrin.user.getCreditCard(user, cardName, callback);
+
+  ordrin.user.setCreditCard(user, cardName, creditCard, callback);
+
+  ordrin.user.removeCreditCard(user, cardName, callback);
+
+  ordrin.user.getOrderHistory(user, callback);
+
+  ordrin.user.getOrderDetails(user, orderId, callback);
+
+  ordrin.user.setPassword(user, newPassword, callback);
+</pre>
+
+### Order API
+<pre>
+  ordrin.order.placeOrder(restaurantId, tray, tip, deliveryTime, firstName, lastName, address, creditCard, email, callback)
+
+  ordrin.order.placeOrderAndCreateUser(restaurantId, tray, tip, deliveryTime, firstName, lastName, address, creditCard, user, callback); // this function both places an order and creates a new user account with the information in user.
+</pre>
