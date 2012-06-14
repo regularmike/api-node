@@ -19,11 +19,12 @@ The simplest way to install is with npm:
 
   var ordrin = ordrinApi.init({
     apiKey: "YOUR-ORDRIN-API-KEY",
-    restaurantUrl: "https://r-test.ordr.in/",
-    userUrl: "https://u-test.ordr.in/",
-    orderUrl: "https://o-test.ordr.in/"
+    restaurantUrl: "r-test.ordr.in",
+    userUrl: "u-test.ordr.in",
+    orderUrl: "o-test.ordr.in"
   });
 </pre>
+Note that for the Urls https:// and the trailing / are all implied. DO NOT include them in the Url strings. The ordr.in API only supports https requests.
 
 ### Callbacks
 Because node is async every function call you make to the ordrin api includes a callback. This will be called when the api has finished your request. The format of this callback is always the same.  
@@ -52,7 +53,7 @@ They are both returned by and should be passed into every one of the library's f
     city: String,
     state: String,
     zip: Number,
-    phone: String,
+    phone: Number,
     addr2: String
   }
 
