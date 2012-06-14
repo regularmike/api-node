@@ -68,7 +68,7 @@ They are both returned by and should be passed into every one of the library's f
 
   User = {
     email: String,
-    password: String
+    password: String // this is always a SHA256 encoded hash. NEVER pass the user's actual password into the library
   }
 
   trayItem = {
