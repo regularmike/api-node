@@ -66,7 +66,7 @@ They are both returned by and should be passed into every one of the library's f
     cvc: Number
   }
 
-  User = {
+  UserLogin = {
     email: String,
     password: String // this is always a SHA256 encoded hash. NEVER pass the user's actual password into the library
   }
@@ -83,7 +83,7 @@ They are both returned by and should be passed into every one of the library's f
 </pre>
 You can create an object of one of these classes like so:
 <pre>
-  var user = new Ordrin.User("example@example.com", "password");
+  var user = new Ordrin.UserLogin("example@example.com", "encodedPassword");
 </pre>
 
 
@@ -100,31 +100,31 @@ You can create an object of one of these classes like so:
 
 ### User API
 <pre>
-  ordrin.user.getUser(user, callback);
+  ordrin.user.getUser(userLogin, callback);
 
-  ordrin.user.createUser(user, firstName, lastName, callback);
+  ordrin.user.createUser(userLogin, firstName, lastName, callback);
 
-  ordrin.user.getAllAddresses(user, callback);
+  ordrin.user.getAllAddresses(userLogin, callback);
 
-  ordrin.user.getAddress(user, addressName, callback);
+  ordrin.user.getAddress(userLogin, addressName, callback);
 
-  ordrin.user.setAddress(user, addressName, address, callback);
+  ordrin.user.setAddress(userLogin, addressName, address, callback);
 
-  ordrin.user.removeAddress(user, addressName, callback);
+  ordrin.user.removeAddress(userLogin, addressName, callback);
 
-  ordrin.user.getAllCreditCards(user, callback);
+  ordrin.user.getAllCreditCards(userLogin, callback);
 
-  ordrin.user.getCreditCard(user, cardName, callback);
+  ordrin.user.getCreditCard(userLogin, cardName, callback);
 
-  ordrin.user.setCreditCard(user, cardName, creditCard, callback);
+  ordrin.user.setCreditCard(userLogin, cardName, creditCard, callback);
 
-  ordrin.user.removeCreditCard(user, cardName, callback);
+  ordrin.user.removeCreditCard(userLogin, cardName, callback);
 
-  ordrin.user.getOrderHistory(user, callback);
+  ordrin.user.getOrderHistory(userLogin, callback);
 
-  ordrin.user.getOrderDetails(user, orderId, callback);
+  ordrin.user.getOrderDetails(userLogin, orderId, callback);
 
-  ordrin.user.setPassword(user, newPassword, callback);
+  ordrin.user.setPassword(userLogin, newPassword, callback);
 </pre>
 
 ### Order API

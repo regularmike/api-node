@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": false,
   "dependencies": {
-    "jshashes": "0.1.4b"
+    "querystring": "0.1.0" 
   },
   "main": "./main"
 }
