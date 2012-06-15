@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "private": false,
   "dependencies": {
-    "querystring": "0.1.0" 
   },
   "main": "./main"
 }
