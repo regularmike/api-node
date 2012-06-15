@@ -61,7 +61,7 @@ They are both returned by and should be passed into every one of the library's f
     name: String,
     expiryMonth: Number,
     expiryYear: Number,
-    billAddress: String, // just an address string, NOT an object of the above address class
+    billAddress: String, // An object of the above address class
     number: Number,
     cvc: Number
   }
