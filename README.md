@@ -3,6 +3,7 @@
 ## About
 A node library for the ordr.in API  
 See full API documantation at <a href="http://ordr.in/developers">http://ordr.in/developers</a>
+Also check out a working demo of all the api calls by running demo.js
 
 ## Installation
 The simplest way to install is with npm:  
@@ -71,13 +72,13 @@ They are both returned by and should be passed into every one of the library's f
     password: String // this is always an unencoded password 
   }
 
-  trayItem = {
+  TrayItem = {
     itemId: Number,
     quantity: Number,
     options: Array // array of option ids
   }
 
-  tray = {
+  Tray = {
     items: Array // array of trayItem objects of the above class
   }
 </pre>

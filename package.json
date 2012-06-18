@@ -1,8 +1,9 @@
 {
   "name": "api-node",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": false,
   "dependencies": {
+    "prompt": ">=0.2.1"
   },
   "main": "./main"
 }
