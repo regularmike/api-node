@@ -68,7 +68,7 @@ They are both returned by and should be passed into every one of the library's f
 
   UserLogin = {
     email: String,
-    password: String // this is always a SHA256 encoded hash. NEVER pass the user's actual password into the library
+    password: String // this is always an unencoded password 
   }
 
   trayItem = {
@@ -83,7 +83,7 @@ They are both returned by and should be passed into every one of the library's f
 </pre>
 You can create an object of one of these classes like so:
 <pre>
-  var user = new Ordrin.UserLogin("example@example.com", "encodedPassword");
+  var user = new Ordrin.UserLogin("example@example.com", "password");
 </pre>
 
 
@@ -128,8 +128,10 @@ You can create an object of one of these classes like so:
 </pre>
 
 ### Order API
-<pre>
-  ordrin.order.placeOrder(restaurantId, tray, tip, deliveryTime, firstName, lastName, address, creditCard, email, callback)
+The Order API includes the ability to create a new user when you place the order. If you want to do that just pass in the new user's login credentials in the user object, and set createUser to true.
 
-  ordrin.order.placeOrderAndCreateUser(restaurantId, tray, tip, deliveryTime, firstName, lastName, address, creditCard, user, callback); // this function both places an order and creates a new user account with the information in user.
+If you don't want the order to be associated with a user account then pass in false as the password inside the user object, and setCreateUser to false.
+
+<pre>
+  ordrin.order.placeOrder(restaurantId, tray, tip, deliveryTime, firstName, lastName, address, creditCard, user, createUser, callback)
 </pre>
