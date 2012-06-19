@@ -245,7 +245,18 @@
   }
 
   function getOrderHistory(err, results){
-    ordrin.user.getOrderHistory(userLogin, callback);
+    ordrin.user.getOrderHistory(userLogin, function(err, data){
+      if (err){
+        console.error("Something went wrong", err);
+        process.exit();
+      }else{
+        console.log("Got Data from API");
+        console.log(data);
+        defaultValues.orderId = data[0].oid;
+        queue = queue.slice(1);
+        main();
+      }
+    });
   }
 
   function getOrderDetails(err, results){
@@ -254,7 +265,7 @@
   }
 
   function changeUserPassword(err, results){
-    results = setValues["newPassword", results);
+    results = setValues(["newPassword"], results);
     ordrin.user.setPassword(userLogin, results.newPassword, callback);
   }
 
