@@ -45,8 +45,7 @@ Example function callback:
 </pre>
 
 ### Data Structures
-The following classes are part of the library and are used whenever there is an address, credit card, user, tray item, or tray.  
-They are both returned by and should be passed into every one of the library's function calls.
+The following classes are part of the library and are used whenever you need to pass an address, credit card, user, tray item, or tray to a library function.
 
 <pre>
   Address = {
@@ -86,6 +85,21 @@ You can create an object of one of these classes like so:
 <pre>
   var user = new Ordrin.UserLogin("example@example.com", "password");
 </pre>
+
+### Validation
+Each of the above Data Structers throw errors if you pass invalid values to their constructors. The errors are children 
+of the javascript Error class, and include the additional property fieldErrors. This describes the 
+different validation errors that occured. 
+Example
+<pre>
+  try{
+    var address = new Ordrin.Address("1 Main Street", "College Station", "RDS", 7765, 1234);
+  }catch (e){
+    console.log(e.fieldErrors);
+  }
+<pre>
+The above example will print out an object that contains the properties: state, zip, and phone since those were the invalid properties. And a short message with each one that describes what was invalid. 
+You can see validation in action in the demo script.
 
 
 ### Restaurant API
