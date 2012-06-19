@@ -113,17 +113,35 @@
   function createUser(err, result){
     result = setValues(["firstName", "lastName", "email", "password"], result);
 
-    userLogin = new ordrin.UserLogin(result.email, result.password);
-    ordrin.user.createUser(userLogin, result.firstName, result.lastName, callback);
+    try{
+      userLogin = new ordrin.UserLogin(result.email, result.password);
+      ordrin.user.createUser(userLogin, result.firstName, result.lastName, callback);
+    }catch(e){
+      var errorFields = "";
+      for (var field in e.fields){
+        errorFields += field + ", ";
+      }
+      console.log("Invalid info. Check the following fields:", errorFields);
+      main();
+    }
   }
 
   // creates an address object and saves it to the user's account
   function createAddress(err, result){
     result = setValues(["addressName", "streetAddress", "city", "state", "zip", "phone", "streetAddress2"], result);
 
-    userAddress = new ordrin.Address(result.streetAddress, result.city, result.state, 
-                                     result.zip, result.phone, result.streetAddress2);
-    ordrin.user.setAddress(userLogin, result.addressName, userAddress, callback);
+    try{
+      userAddress = new ordrin.Address(result.streetAddress, result.city, result.state, 
+                                       result.zip, result.phone, result.streetAddress2);
+      ordrin.user.setAddress(userLogin, result.addressName, userAddress, callback);
+    }catch(e){
+      var errorFields = "";
+      for (var field in e.fields){
+        errorFields += field + ", ";
+      }
+      console.log("Invalid info. Check the following fields:", errorFields);
+      main();
+    }
     
   }
 
@@ -217,9 +235,18 @@
 
   function createCreditCard(err, result){
     result = setValues(["cardName", "nameOnCard", "expiryMonth", "expiryYear", "number", "cvc"], result);
-    userCreditCard = new ordrin.CreditCard(result.nameOnCard, result.expiryMonth, result.expiryYear, 
+    try{
+      userCreditCard = new ordrin.CreditCard(result.nameOnCard, result.expiryMonth, result.expiryYear, 
                                            userAddress, result.number, result.cvc);
-    ordrin.user.setCreditCard(userLogin, result.cardName, userCreditCard, callback);
+      ordrin.user.setCreditCard(userLogin, result.cardName, userCreditCard, callback);
+    }catch(e){
+      var errorFields = "";
+      for (var field in e.fields){
+        errorFields += field + ", ";
+      }
+      console.log("Invalid info. Check the following fields:", errorFields);
+      main();
+    }
   }
 
   function getCreditCards(err, results){
@@ -266,9 +293,18 @@
     var item = new ordrin.TrayItem(results.itemId, results.quantity, []);
     var tray = new ordrin.Tray([item]);
 
-    var userLogin = new ordrin.UserLogin(results.email, false);
-    ordrin.order.placeOrder(results.restaurantId, tray, results.tip, results.time, results.firstName, results.lastName,
-                            userAddress, userCreditCard, userLogin, false, callback);
+    try{
+      var userLogin = new ordrin.UserLogin(results.email, false);
+      ordrin.order.placeOrder(results.restaurantId, tray, results.tip, results.time, results.firstName, results.lastName,
+                              userAddress, userCreditCard, userLogin, false, callback);
+    }catch(e){
+      var errorFields = "";
+      for (var field in e.fields){
+        errorFields += field + ", ";
+      }
+      console.log("Invalid info. Check the following fields:", errorFields);
+      main();
+    }
   }
 
   function orderFoodAndCreateUser(err, results){
@@ -282,10 +318,19 @@
     var item = new ordrin.TrayItem(results.itemId, results.quantity, []);
     var item = new ordrin.TrayItem(results.itemId, results.quantity, []);
     var tray = new ordrin.Tray([item]);
-
-    var userLogin = new ordrin.UserLogin(results.email, results.password);
-    ordrin.order.placeOrder(results.restaurantId, tray, results.tip, results.time, results.firstName, results.lastName,
-                            userAddress, userCreditCard, userLogin, true, callback);
+    
+    try{
+      var userLogin = new ordrin.UserLogin(results.email, results.password);
+      ordrin.order.placeOrder(results.restaurantId, tray, results.tip, results.time, results.firstName, results.lastName,
+                              userAddress, userCreditCard, userLogin, true, callback);
+    }catch(e){
+      var errorFields = "";
+      for (var field in e.fields){
+        errorFields += field + ", ";
+      }
+      console.log("Invalid info. Check the following fields:", errorFields);
+      main();
+    }
   }
 
   function getOrderHistory(err, results){
