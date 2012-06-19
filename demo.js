@@ -4,6 +4,7 @@
       prompt    = require("prompt");
 
 
+  prompt.message = "Enter";
   prompt.start();
 
   // some globals about the user
@@ -13,8 +14,8 @@
     ["Create a User", ["firstName", "lastName", "email", "password"], createUser],
     ["Create an Address", ["addressName", "streetAddress", "city", "state", "zip", "phone", "streetAddress2"], createAddress],
     ["Get all restaurants for address at given time. Time is either ASAP or a millisecond timestamp", ["time"], getRestaurants],
-    ["Get if a particular restaurant will deliver right now", ["restaurantId"], getDeliveryCheck],
-    ["Get Fee for ordering a given amount with a given tip", ["restaurantId", "amount", "tip"], getDeliveryFee],
+    ["Get if a particular restaurant will deliver", ["restaurantId", "time"], getDeliveryCheck],
+    ["Get Fee for ordering a given amount with a given tip", ["restaurantId", "amount", "tip", "time"], getDeliveryFee],
     ["Get Details about a given restaurant", ["restaurantId"], getRestaurantDetails],
     ["Getting all your user's addresses", [], getAddresses],
     ["Remove an Address", ["addressName"], removeAddress],
@@ -24,10 +25,11 @@
     ["Get a specific Credit Card", ["cardName"], getCreditCard],
     ["Remove a specific Credit Card", ["cardName"], removeCreditCard],
     ["Create the earlier credit card again", ["cardName"], reCreateCreditCard],
-    ["Order food from this user", ["restaurantId", "itemId", "quantity", "tip", "firstName", "lastName"], orderFoodLoggedIn],
-    ["Order food without a user", ["restaurantId", "itemId", "quantity", "tip", "firstName", "lastName", "email"], orderFoodNoUser],
+    ["Order food from this user", ["restaurantId", "itemId", "quantity", "tip", "firstName", "lastName", "time"], orderFoodLoggedIn],
+    ["Order food without a user", ["restaurantId", "itemId", "quantity", "tip", "firstName", 
+                                   "lastName", "email", "time"], orderFoodNoUser],
     ["Order food and create a new user", ["restaurantId", "itemId", "quantity", "tip", 
-                                          "firstName", "lastName", "email", "password"], orderFoodAndCreateUser],
+                                          "firstName", "lastName", "email", "password", "time"], orderFoodAndCreateUser],
     ["Getting Order History", [], getOrderHistory],
     ["Get Order Details", ["orderId"], getOrderDetails],
     ["Change the user's password", ["newPassword"], changeUserPassword]
@@ -148,13 +150,39 @@
   }
 
   function getDeliveryCheck(err, result){
-    result = setValues(["restaurantId"], result);
-    ordrin.restaurant.getDeliveryCheck(result.restaurantId, "ASAP", userAddress, callback);
+    result = setValues(["restaurantId", "time"], result);
+
+    if (result.time != "ASAP"){
+      result.time = new Date(Number(result.time));
+    }
+
+    ordrin.restaurant.getDeliveryCheck(result.restaurantId, result.time, userAddress, function(err, data){
+      if (err){
+        console.error("Something went wrong", err);
+        process.exit();
+      }else{
+        if (!data.delivery){
+          console.log("Restaurant does not deliver during given time, trying one hour later");
+          var timestamp      = new Date().getTime();
+          defaultValues.time = new Date(timestamp + 3600000).getTime();
+          getDeliveryCheck(null, {restaurantId: "", time: ""});
+        }else{
+          console.log("Got API data", defaultValues.time, data);
+          queue = queue.slice(1);
+          main();
+        }
+      }
+    });
   }
 
   function getDeliveryFee(err, result){
-    result = setValues(["restaurantId", "amount", "tip"], result);
-    ordrin.restaurant.getFee(result.restaurantId, result.amount, result.tip, "ASAP", userAddress, callback);
+    result = setValues(["restaurantId", "amount", "tip", "time"], result);
+
+    if (result.time != "ASAP"){
+      result.time = new Date(Number(result.time));
+    }
+
+    ordrin.restaurant.getFee(result.restaurantId, result.amount, result.tip, result.time, userAddress, callback);
   }
 
   function getRestaurantDetails(err, result){
@@ -214,33 +242,49 @@
   }
 
   function orderFoodLoggedIn(err, results){
-    results = setValues(["restaurantId", "itemId", "quantity", "tip", "firstName", "lastName"], results);
+    results = setValues(["restaurantId", "itemId", "quantity", "tip", "firstName", "lastName", "time"], results);
+
+    if (results.time != "ASAP"){
+      results.time = new Date(Number(results.time));
+    }
+
     var item = new ordrin.TrayItem(results.itemId, results.quantity, []);
     var tray = new ordrin.Tray([item]);
 
-    ordrin.order.placeOrder(results.restaurantId, tray, results.tip, "ASAP", results.firstName, results.lastName,
+    ordrin.order.placeOrder(results.restaurantId, tray, results.tip, results.time, results.firstName, results.lastName,
                             userAddress, userCreditCard, userLogin, false, callback);
     defaultValues.email = "demo+" + userId + "alt@ordr.in";
   }
 
   function orderFoodNoUser(err, results){
-    results = setValues(["restaurantId", "itemId", "quantity", "tip", "firstName", "lastName", "email"], results);
+    results = setValues(["restaurantId", "itemId", "quantity", "tip", "firstName", "lastName", "email", "time"], results);
+
+    if (results.time != "ASAP"){
+      results.time = new Date(Number(results.time));
+    }
+
     var item = new ordrin.TrayItem(results.itemId, results.quantity, []);
     var tray = new ordrin.Tray([item]);
 
     var userLogin = new ordrin.UserLogin(results.email, false);
-    ordrin.order.placeOrder(results.restaurantId, tray, results.tip, "ASAP", results.firstName, results.lastName,
+    ordrin.order.placeOrder(results.restaurantId, tray, results.tip, results.time, results.firstName, results.lastName,
                             userAddress, userCreditCard, userLogin, false, callback);
   }
 
   function orderFoodAndCreateUser(err, results){
-    results = setValues(["restaurantId", "itemId", "quantity", "tip", "firstName", "lastName", "email", "password"], results);
+    results = setValues(["restaurantId", "itemId", "quantity", "tip", "firstName", 
+                         "lastName", "email", "password", "time"], results);
+    
+    if (results.time != "ASAP"){
+      results.time = new Date(Number(results.time));
+    }
+
     var item = new ordrin.TrayItem(results.itemId, results.quantity, []);
     var item = new ordrin.TrayItem(results.itemId, results.quantity, []);
     var tray = new ordrin.Tray([item]);
 
     var userLogin = new ordrin.UserLogin(results.email, results.password);
-    ordrin.order.placeOrder(results.restaurantId, tray, results.tip, "ASAP", results.firstName, results.lastName,
+    ordrin.order.placeOrder(results.restaurantId, tray, results.tip, results.time, results.firstName, results.lastName,
                             userAddress, userCreditCard, userLogin, true, callback);
   }
 
