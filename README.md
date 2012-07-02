@@ -53,7 +53,7 @@ The following classes are part of the library and are used whenever you need to 
     city: String,
     state: String,
     zip: Number,
-    phone: Number,
+    phone: String,
     addr2: String
   }
 
@@ -97,7 +97,7 @@ Example
   }catch (e){
     console.log(e.fieldErrors);
   }
-<pre>
+</pre>
 The above example will print out an object that contains the properties: state, zip, and phone since those were the invalid properties. And a short message with each one that describes what was invalid. 
 You can see validation in action in the demo script.
 
