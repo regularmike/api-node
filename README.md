@@ -27,6 +27,16 @@ The simplest way to install is with npm:
 </pre>
 Note that for the Urls https:// and the trailing / are all implied. DO NOT include them in the Url strings. The ordr.in API only supports https requests.
 
+Alternatively you can set the servers field to either "test" or "production" to have the wrapper set the server url's for you. That looks like this:
+<pre>
+  var ordrinApi = require("ordrin-api");
+
+  var odrin = ordrinApi.init({
+    apiKey: "YOUR_ORDRIN_API_KEY",
+    servers: "test"
+  });
+</pre>
+
 ### Callbacks
 Because node is async every function call you make to the ordrin api includes a callback. This will be called when the api has finished your request. The format of this callback is always the same.  
 It takes two parameters: error and data.  
@@ -84,16 +94,17 @@ The following classes are part of the library and are used whenever you need to 
 You can create an object of one of these classes like so:
 <pre>
   var user = new Ordrin.UserLogin("example@example.com", "password");
+  var address = new Ordrin.Address("1 Main Street", "College Station", "RDS", 77840, 1234);
 </pre>
 
 ### Validation
 Each of the above Data Structers throw errors if you pass invalid values to their constructors. The errors are children 
 of the javascript Error class, and include the additional property fieldErrors. This describes the 
 different validation errors that occured. 
-Example
+Example of BAD address initialization:
 <pre>
   try{
-    var address = new Ordrin.Address("1 Main Street", "College Station", "RDS", 7765, 1234);
+    var address = new Ordrin.Address("1 Main Street", "College Station", "RDS", 7740, 1234);
   }catch (e){
     console.log(e.fieldErrors);
   }

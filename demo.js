@@ -66,9 +66,10 @@
   prompt.get(["apiKey"], function(err, result){
     ordrin = ordrin.init({
       apiKey: result.apiKey,
-      restaurantUrl: "r-test.ordr.in",
+      servers: "test"
+    /*  restaurantUrl: "r-test.ordr.in",
       userUrl: "u-test.ordr.in",
-      orderUrl: "o-test.ordr.in"
+      orderUrl: "o-test.ordr.in"*/
     });
     main();
   });
