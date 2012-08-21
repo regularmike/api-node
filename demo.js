@@ -13,7 +13,7 @@
   var queue = [
     ["Create a User", ["firstName", "lastName", "email", "password"], createUser],
     ["Create an Address", ["addressName", "streetAddress", "city", "state", "zip", "phone", "streetAddress2"], createAddress],
-    ["Get all restaurants for address at given time. Time is either ASAP or a millisecond timestamp", ["time"], getRestaurants],
+    ["Get all restaurants for address at given time. Time is either ASAP or a ordr.in date-time string", ["time"], getRestaurants],
     ["Get if a particular restaurant will deliver", ["restaurantId", "time"], getDeliveryCheck],
     ["Get Fee for ordering a given amount with a given tip", ["restaurantId", "amount", "tip", "time"], getDeliveryFee],
     ["Get Details about a given restaurant", ["restaurantId"], getRestaurantDetails],
@@ -149,10 +149,7 @@
   // gets all restaurants delivering at the given time
   function getRestaurants(err, result){
     result = setValues(["time"], result);
-
-    if (result.time != "ASAP"){
-      result.time = new Date(Number(result.time));
-    }
+    result.time = parseDate(result.time);
 
     ordrin.restaurant.getDeliveryList(result.time, userAddress, function(err, data){
       if (err){
@@ -170,10 +167,7 @@
 
   function getDeliveryCheck(err, result){
     result = setValues(["restaurantId", "time"], result);
-
-    if (result.time != "ASAP"){
-      result.time = new Date(Number(result.time));
-    }
+    result.time = parseDate(result.time);
 
     ordrin.restaurant.getDeliveryCheck(result.restaurantId, result.time, userAddress, function(err, data){
       if (err){
@@ -197,9 +191,7 @@
   function getDeliveryFee(err, result){
     result = setValues(["restaurantId", "amount", "tip", "time"], result);
 
-    if (result.time != "ASAP"){
-      result.time = new Date(Number(result.time));
-    }
+    result.time = parseDate(result.time);
 
     ordrin.restaurant.getFee(result.restaurantId, result.amount, result.tip, result.time, userAddress, callback);
   }
@@ -272,9 +264,7 @@
   function orderFoodLoggedIn(err, results){
     results = setValues(["restaurantId", "itemId", "quantity", "tip", "firstName", "lastName", "time"], results);
 
-    if (results.time != "ASAP"){
-      results.time = new Date(Number(results.time));
-    }
+    result.time = parseDate(result.time);
 
     var item = new ordrin.TrayItem(results.itemId, results.quantity, []);
     var tray = new ordrin.Tray([item]);
@@ -287,9 +277,7 @@
   function orderFoodNoUser(err, results){
     results = setValues(["restaurantId", "itemId", "quantity", "tip", "firstName", "lastName", "email", "time"], results);
 
-    if (results.time != "ASAP"){
-      results.time = new Date(Number(results.time));
-    }
+    result.time = parseDate(result.time);
 
     var item = new ordrin.TrayItem(results.itemId, results.quantity, []);
     var tray = new ordrin.Tray([item]);
@@ -312,9 +300,7 @@
     results = setValues(["restaurantId", "itemId", "quantity", "tip", "firstName", 
                          "lastName", "email", "password", "time"], results);
     
-    if (results.time != "ASAP"){
-      results.time = new Date(Number(results.time));
-    }
+    result.time = parseDate(result.time);
 
     var item = new ordrin.TrayItem(results.itemId, results.quantity, []);
     var item = new ordrin.TrayItem(results.itemId, results.quantity, []);
@@ -380,5 +366,13 @@
           text += possible.charAt(Math.floor(Math.random() * possible.length));
 
       return text;
+  }
+
+  // takes the date input and parses it for the api
+  function parseDate(date){
+    return date;
+    /*if (date != "ASAP"){
+      return new Date(Number(date));
+    }*/
   }
 })();
