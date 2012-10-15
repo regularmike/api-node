@@ -1,6 +1,6 @@
 {
   "name": "ordrin-api",
-  "version": "0.1.99",
+  "version": "0.1.100",
   "private": false,
   "description": "A node library wrapper for the ordr.in food ordering API.",
   "dependencies": {
