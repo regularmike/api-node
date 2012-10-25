@@ -25,7 +25,7 @@ The simplest way to install is with npm:
     orderUrl: "o-test.ordr.in"
   });
 </pre>
-Note that for the Urls https:// and the trailing / are all implied. DO NOT include them in the Url strings. The ordr.in API only supports https requests.
+Note that for the Urls https:// and the trailing / are all implied. You can also specify a full url like "http://localhost:8888" if you want to control the schee and port.
 
 Alternatively you can set the servers field to either "test" or "production" to have the wrapper set the server url's for you. That looks like this:
 <pre>
