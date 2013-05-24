@@ -168,6 +168,7 @@
   function getDeliveryCheck(err, result){
     result = setValues(["restaurantId", "time"], result);
     result.time = parseDate(result.time);
+    
     ordrin.restaurant.getDeliveryCheck(result.restaurantId, result.time, userAddress, function(err, data){
       if (err){
         console.error("Something went wrong", err);
