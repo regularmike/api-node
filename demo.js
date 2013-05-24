@@ -168,7 +168,7 @@
   function getDeliveryCheck(err, result){
     result = setValues(["restaurantId", "time"], result);
     result.time = parseDate(result.time);
-
+    
     ordrin.restaurant.getDeliveryCheck(result.restaurantId, result.time, userAddress, function(err, data){
       if (err){
         console.error("Something went wrong", err);
@@ -177,7 +177,7 @@
         if (!data.delivery){
           console.log("Restaurant does not deliver during given time, trying one hour later");
           var timestamp      = new Date().getTime();
-          defaultValues.time = new Date(timestamp + 3600000).getTime();
+          defaultValues.time = new Date(timestamp + 3600000);
           getDeliveryCheck(null, {restaurantId: "", time: ""});
         }else{
           console.log("Got API data", defaultValues.time, data);
@@ -264,10 +264,12 @@
   function orderFoodLoggedIn(err, results){
     results = setValues(["restaurantId", "itemId", "quantity", "tip", "firstName", "lastName", "time"], results);
 
-    result.time = parseDate(result.time);
+    results.time = parseDate(results.time);
 
     var item = new ordrin.TrayItem(results.itemId, results.quantity, []);
     var tray = new ordrin.Tray([item]);
+
+    tray = tray.buildTrayString();
 
     ordrin.order.placeOrder(results.restaurantId, tray, results.tip, results.time, results.firstName, results.lastName,
                             userAddress, userCreditCard, userLogin, false, callback);
@@ -277,13 +279,16 @@
   function orderFoodNoUser(err, results){
     results = setValues(["restaurantId", "itemId", "quantity", "tip", "firstName", "lastName", "email", "time"], results);
 
-    result.time = parseDate(result.time);
+    results.time = parseDate(results.time);
 
     var item = new ordrin.TrayItem(results.itemId, results.quantity, []);
     var tray = new ordrin.Tray([item]);
 
+    tray = tray.buildTrayString();
+
     try{
       var userLogin = new ordrin.UserLogin(results.email, false);
+
       ordrin.order.placeOrder(results.restaurantId, tray, results.tip, results.time, results.firstName, results.lastName,
                               userAddress, userCreditCard, userLogin, false, callback);
     }catch(e){
@@ -300,11 +305,12 @@
     results = setValues(["restaurantId", "itemId", "quantity", "tip", "firstName", 
                          "lastName", "email", "password", "time"], results);
     
-    result.time = parseDate(result.time);
+    results.time = parseDate(results.time);
 
     var item = new ordrin.TrayItem(results.itemId, results.quantity, []);
-    var item = new ordrin.TrayItem(results.itemId, results.quantity, []);
     var tray = new ordrin.Tray([item]);
+
+    tray = tray.buildTrayString();
     
     try{
       var userLogin = new ordrin.UserLogin(results.email, results.password);
