@@ -1,17 +1,16 @@
 {
-  "name": "ordrin-api",
-  "version": "0.2.0",
-  "private": false,
-  "description": "A node library wrapper for the ordr.in food ordering API.",
-  "dependencies": {
-    "underscore": "1.3.3"
+  "name" : "ordrin-api",
+  "version" : "0.3.0",
+  "private" : false,
+  "description" : "A node library for the ordr.in food ordering API",
+  "dependencies" : {
+    "jayschema" : "0.1.x",
+    "superagent" : "0.15.x",
+    "underscore" : "1.5.x"
   },
-  "devDependencies": {
-    "prompt": "0.2.1"
-  },
-  "repository": {
+  "repository" : {
     "type": "git",
     "url": "https://github.com/ordrin/api-node"
   },
-  "main": "./main"
+  "main" : "./api"
 }
