@@ -35,14 +35,14 @@
     }
     
     function call_api(base_url, method, uri, data, login, callback){
-      var full_url, partial, hash;
+      var full_url, partial, hash, headers;
       full_url = base_url+uri;
       headers = {"X-NAAMA-CLIENT-AUTHENTICATION" : 'id="'+api_key+'", version="1"'};
       partial = request(method, full_url);
       if(login){
         hash = crypto.createHash("SHA256");
         hash = hash.update(login.password+login.email+uri).digest("hex");
-        headers["X-NAAMA-AUTHENTICATION"] = 'username="'+login.email+'", response="'+hash+'", version="1"');
+        headers["X-NAAMA-AUTHENTICATION"] = 'username="'+login.email+'", response="'+hash+'", version="1"';
       }
       partial = partial.set(headers);
       if(data){
@@ -118,7 +118,7 @@
                  {email : kwargs.email, password : mutate.sha256(kwargs.current_password)},
                  callback);
       } else {
-        call_api(urls[endpoint_group], endpoint_data.method, uri, data, null, callback);
+        call_api(urls[endpoint_group], endpoint_data.meta.method, uri, data, null, callback);
       }
     }
   };
