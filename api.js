@@ -8,8 +8,8 @@
   PRODUCTION = exports.PRODUCTION = api_helper.PRODUCTION;
   TEST = exports.TEST = api_helper.TEST;
 
-  exports.APIs = function(api_key, servers){
-    var helper = new api_helper.APIHelper(api_key, servers);
+  exports.APIs = function(api_key, servers, return_request_info){
+    var helper = new api_helper.APIHelper(api_key, servers, return_request_info);
 
     
     // order endpoints

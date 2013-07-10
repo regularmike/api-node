@@ -19,7 +19,7 @@
   exports.PRODUCTION = PRODUCTION = 0;
   exports.TEST = TEST = 1;
   
-  exports.APIHelper = function(api_key, servers){
+  exports.APIHelper = function(api_key, servers, return_request_info){
     var urls = {};
     if(_.isUndefined(servers)){
       servers = TEST;
@@ -37,20 +37,28 @@
     function call_api(base_url, method, uri, data, login, callback){
       var full_url, partial, hash;
       full_url = base_url+uri;
-      partial = request(method, full_url).set("X-NAAMA-CLIENT-AUTHENTICATION",
-                                              'id="'+api_key+'", version="1"');
+      headers = {"X-NAAMA-CLIENT-AUTHENTICATION" : 'id="'+api_key+'", version="1"'};
+      partial = request(method, full_url);
       if(login){
         hash = crypto.createHash("SHA256");
         hash = hash.update(login.password+login.email+uri).digest("hex");
-        partial = partial.set("X-NAAMA-AUTHENTICATION",
-                              'username="'+login.email+'", response="'+hash+'", version="1"');
+        headers["X-NAAMA-AUTHENTICATION"] = 'username="'+login.email+'", response="'+hash+'", version="1"');
       }
+      partial = partial.set(headers);
       if(data){
         partial = partial.type("form").send(data);
       }
       partial.end(function(res){
         if(res.ok){
-          callback(null, res.body);
+          if(return_request_info){
+            callback(null, res.body, {
+              host : base_url,
+              uri : uri,
+              method : method,
+              data : data,
+              headers : headers
+            });
+          }
         } else {
           callback(new Error(res.error));
         }
