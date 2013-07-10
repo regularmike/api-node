@@ -66,7 +66,7 @@
     };
 
     this.call_endpoint = function(endpoint_group, endpoint_name, url_params, kwargs, callback){
-      var data, validation, arg_dict, data, tmpl, uri;
+      var data, validation, arg_dict, data, tmpl, uri, login;
       var endpoint_data = ENDPOINT_INFO[endpoint_group][endpoint_name];
       var value_mutators = {};
       console.log(kwargs);
@@ -114,12 +114,11 @@
           callback(new Error("Authenticated request requires arguments 'email' and 'current_password'"));
           return;
         }
-        call_api(urls[endpoint_group], endpoint_data.meta.method, uri, data,
-                 {email : kwargs.email, password : mutate.sha256(kwargs.current_password)},
-                 callback);
+        login = {email : kwargs.email, password : mutate.sha256(kwargs.current_password)};
       } else {
-        call_api(urls[endpoint_group], endpoint_data.meta.method, uri, data, null, callback);
+        login = null;
       }
+      call_api(urls[endpoint_group], endpoint_data.meta.method, uri, data, null, callback);
     }
   };
 }());
