@@ -92,7 +92,9 @@
       }));
       console.log(arg_dict);
       data = _.object(_.filter(_.map(kwargs, function(value, name){
-        return [name, value_mutators[name](value)];
+        if(_.has(value_mutators, name)){
+          return [name, value_mutators[name](value)];
+        }
       }), function(item){
         return !(_.contains(url_params, item[0]) || item[0] === 'current_password');
       }));
