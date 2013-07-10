@@ -96,7 +96,8 @@
           return [name, value_mutators[name](value)];
         }
       }), function(item){
-        return !(_.contains(url_params, item[0]) || item[0] === 'current_password');
+        
+        return item && !(_.contains(url_params, item[0]) || item[0] === 'current_password');
       }));
       tmpl = _.template(endpoint_data.meta.uri);
       uri = tmpl(arg_dict);
