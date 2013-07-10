@@ -94,7 +94,7 @@
       }
       validation = jayschema.validate(kwargs, endpoint_data);
       if(!_.isEmpty(validation)){
-        callback(new Error(validation));
+        callback({msg : validation});
         return;
       }
       arg_dict = _.object(_.map(url_params, function(name){
