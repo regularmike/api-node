@@ -2,7 +2,7 @@
   "order": {
     "order_guest": {
       "type": "object",
-      "title": "Credit Card",
+      "title": "Guest Order",
       "description": "Place an order to a restaurant as a guest",
       "required": [
         "rid",
@@ -165,7 +165,7 @@
           "default_value": "555-555-5555"
         }
       },
-      "id": "cc",
+      "id": "addr",
       "allOf": [
         {
           "split": false,
@@ -723,7 +723,7 @@
     },
     "create_addr": {
       "type": "object",
-      "title": "Address",
+      "title": "Create Address",
       "description": "Create a new address or modify an existing address",
       "required": [
         "email",

@@ -70,6 +70,7 @@
       var endpoint_data = ENDPOINT_INFO[endpoint_group][endpoint_name];
       var value_mutators = {};
       console.log(kwargs);
+      console.log(endpoint_data);
       _.each(endpoint_data.properties, function(info, name){
         if(_.has(info, 'mutator')){
           value_mutators[name] = mutate[info.mutator];
@@ -113,7 +114,7 @@
           callback(new Error("Authenticated request requires arguments 'email' and 'current_password'"));
           return;
         }
-        call_api(urls[endpoint_group], endpoint_data.method, uri, data,
+        call_api(urls[endpoint_group], endpoint_data.meta.method, uri, data,
                  {email : kwargs.email, password : mutate.sha256(kwargs.current_password)},
                  callback);
       } else {
