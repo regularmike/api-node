@@ -90,7 +90,7 @@
         });
       });
       if(!_.has(value_mutators, 'email')){
-        value_mutators.email = mutate.identify;
+        value_mutators.email = mutate.identity;
       }
       validation = jayschema.validate(kwargs, endpoint_data);
       if(!_.isEmpty(validation)){
