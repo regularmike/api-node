@@ -2,6 +2,7 @@
   "use strict";
 
   var fs = require('fs');
+  var path = require("path");
   var _ = require('underscore');
   var mutate = require('./mutate');
   var request = require("superagent");
@@ -9,7 +10,7 @@
   var JaySchema = require("jayschema");
   var jayschema = new JaySchema();
   var PRODUCTION, TEST;
-  var ENDPOINT_INFO = JSON.parse(fs.readFileSync('./schemas.json'));
+  var ENDPOINT_INFO = JSON.parse(fs.readFileSync(path.join(__dirname, "/schemas.json")));
 
   _.templateSettings = {
     interpolate : /\{(.+?)\}/g
