@@ -69,6 +69,7 @@
       var data, validation, arg_dict, data, tmpl, uri;
       var endpoint_data = ENDPOINT_INFO[endpoint_group][endpoint_name];
       var value_mutators = {};
+      console.log(kwargs);
       _.each(endpoint_data.properties, function(info, name){
         if(_.has(info, 'mutator')){
           value_mutators[name] = mutate[info.mutator];
@@ -98,13 +99,11 @@
       arg_dict = _.object(_.map(url_params, function(name){
         return [name, encodeURIComponent(value_mutators[name](kwargs[name]))];
       }));
-      console.log(arg_dict);
       data = _.object(_.filter(_.map(kwargs, function(value, name){
         if(_.has(value_mutators, name)){
           return [name, value_mutators[name](value)];
         }
       }), function(item){
-        
         return item && !(_.contains(url_params, item[0]) || item[0] === 'current_password');
       }));
       tmpl = _.template(endpoint_data.meta.uri);
