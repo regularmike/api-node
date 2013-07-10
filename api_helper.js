@@ -118,7 +118,7 @@
       } else {
         login = null;
       }
-      call_api(urls[endpoint_group], endpoint_data.meta.method, uri, data, null, callback);
+      call_api(urls[endpoint_group], endpoint_data.meta.method, uri, data, login, callback);
     }
   };
 }());
