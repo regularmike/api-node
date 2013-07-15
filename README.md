@@ -120,6 +120,8 @@ fails, then `error` will be an `Error` object; otherwise it will be falsy. The
  
 
 
+ - `data.email` : The user's email address
+
  - `data.current_password` : The user's current password
 
 
@@ -278,6 +280,8 @@ fails, then `error` will be an `Error` object; otherwise it will be falsy. The
  
 
 
+ - `data.email` : The user's email address
+
  - `data.current_password` : The user's current password
 
 
@@ -323,6 +327,8 @@ fails, then `error` will be an `Error` object; otherwise it will be falsy. The
  
 
 
+ - `data.email` : The user's email address
+
  - `data.current_password` : The user's current password
 
 
@@ -357,6 +363,8 @@ fails, then `error` will be an `Error` object; otherwise it will be falsy. The
  
 
 
+ - `data.email` : The user's email address
+
  - `data.current_password` : The user's current password
 
 
@@ -372,6 +380,8 @@ fails, then `error` will be an `Error` object; otherwise it will be falsy. The
  - `data.nick` : The nickname of this address
  
 
+
+ - `data.email` : The user's email address
 
  - `data.current_password` : The user's current password
 
@@ -389,6 +399,8 @@ fails, then `error` will be an `Error` object; otherwise it will be falsy. The
  
 
 
+ - `data.email` : The user's email address
+
  - `data.current_password` : The user's current password
 
 
@@ -402,6 +414,8 @@ fails, then `error` will be an `Error` object; otherwise it will be falsy. The
  - `data.email` : The user's email address
  
 
+
+ - `data.email` : The user's email address
 
  - `data.current_password` : The user's current password
 
@@ -417,6 +431,8 @@ fails, then `error` will be an `Error` object; otherwise it will be falsy. The
  
 
 
+ - `data.email` : The user's email address
+
  - `data.current_password` : The user's current password
 
 
@@ -430,6 +446,8 @@ fails, then `error` will be an `Error` object; otherwise it will be falsy. The
  - `data.email` : The user's email address
  
 
+
+ - `data.email` : The user's email address
 
  - `data.current_password` : The user's current password
 
@@ -447,6 +465,8 @@ fails, then `error` will be an `Error` object; otherwise it will be falsy. The
  
 
 
+ - `data.email` : The user's email address
+
  - `data.current_password` : The user's current password
 
 
@@ -460,6 +480,8 @@ fails, then `error` will be an `Error` object; otherwise it will be falsy. The
  - `data.email` : The user's email address
  
 
+
+ - `data.email` : The user's email address
 
  - `data.current_password` : The user's current password
 
@@ -477,6 +499,8 @@ fails, then `error` will be an `Error` object; otherwise it will be falsy. The
  
 
 
+ - `data.email` : The user's email address
+
  - `data.current_password` : The user's current password
 
 
@@ -492,6 +516,8 @@ fails, then `error` will be an `Error` object; otherwise it will be falsy. The
  - `data.nick` : The nickname of this address
  
 
+
+ - `data.email` : The user's email address
 
  - `data.current_password` : The user's current password
 
