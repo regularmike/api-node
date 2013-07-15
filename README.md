@@ -68,7 +68,7 @@ be sent to, and must be set to either `ordrin.PRODUCTION` or `ordrin.TEST`
 
 #### Guest Order
 
-    ordrin_api.order_guest(args)
+    ordrin_api.order_guest(args, callback)
 
 ##### Arguments
 - `args.rid` : Ordr.in's unique restaurant identifier for the restaurant.
@@ -106,7 +106,7 @@ be sent to, and must be set to either `ordrin.PRODUCTION` or `ordrin.TEST`
 
 #### User Order
 
-    ordrin_api.order_user(args)
+    ordrin_api.order_user(args, callback)
 
 ##### Arguments
 - `args.rid` : Ordr.in's unique restaurant identifier for the restaurant.
@@ -161,7 +161,7 @@ be sent to, and must be set to either `ordrin.PRODUCTION` or `ordrin.TEST`
 
 #### Delivery Check
 
-    ordrin_api.delivery_check(args)
+    ordrin_api.delivery_check(args, callback)
 
 ##### Arguments
 - `args.datetime` : Delivery date and time
@@ -173,7 +173,7 @@ be sent to, and must be set to either `ordrin.PRODUCTION` or `ordrin.TEST`
 
 #### Delivery List
 
-    ordrin_api.delivery_list(args)
+    ordrin_api.delivery_list(args, callback)
 
 ##### Arguments
 - `args.datetime` : Delivery date and time
@@ -184,7 +184,7 @@ be sent to, and must be set to either `ordrin.PRODUCTION` or `ordrin.TEST`
 
 #### Fee
 
-    ordrin_api.fee(args)
+    ordrin_api.fee(args, callback)
 
 ##### Arguments
 - `args.datetime` : Delivery date and time
@@ -198,7 +198,7 @@ be sent to, and must be set to either `ordrin.PRODUCTION` or `ordrin.TEST`
 
 #### Restaurant Details
 
-    ordrin_api.restaurant_details(args)
+    ordrin_api.restaurant_details(args, callback)
 
 ##### Arguments
 - `args.rid` : Ordr.in's unique restaurant identifier for the restaurant.
@@ -209,7 +209,7 @@ be sent to, and must be set to either `ordrin.PRODUCTION` or `ordrin.TEST`
 
 #### Change Password
 
-    ordrin_api.change_password(args)
+    ordrin_api.change_password(args, callback)
 
 ##### Arguments
 - `args.email` : The user's email address
@@ -219,7 +219,7 @@ be sent to, and must be set to either `ordrin.PRODUCTION` or `ordrin.TEST`
 
 #### Create Account
 
-    ordrin_api.create_account(args)
+    ordrin_api.create_account(args, callback)
 
 ##### Arguments
 - `args.email` : The user's email address
@@ -230,7 +230,7 @@ be sent to, and must be set to either `ordrin.PRODUCTION` or `ordrin.TEST`
 
 #### Create Address
 
-    ordrin_api.create_addr(args)
+    ordrin_api.create_addr(args, callback)
 
 ##### Arguments
 - `args.email` : The user's email address
@@ -246,7 +246,7 @@ be sent to, and must be set to either `ordrin.PRODUCTION` or `ordrin.TEST`
 
 #### Create Credit Card
 
-    ordrin_api.create_cc(args)
+    ordrin_api.create_cc(args, callback)
 
 ##### Arguments
 - `args.email` : The user's email address
@@ -265,7 +265,7 @@ be sent to, and must be set to either `ordrin.PRODUCTION` or `ordrin.TEST`
 
 #### Remove address
 
-    ordrin_api.delete_addr(args)
+    ordrin_api.delete_addr(args, callback)
 
 ##### Arguments
 - `args.email` : The user's email address
@@ -275,7 +275,7 @@ be sent to, and must be set to either `ordrin.PRODUCTION` or `ordrin.TEST`
 
 #### Remove Credit Card
 
-    ordrin_api.delete_cc(args)
+    ordrin_api.delete_cc(args, callback)
 
 ##### Arguments
 - `args.email` : The user's email address
@@ -285,7 +285,7 @@ be sent to, and must be set to either `ordrin.PRODUCTION` or `ordrin.TEST`
 
 #### Get Account Information
 
-    ordrin_api.get_account_info(args)
+    ordrin_api.get_account_info(args, callback)
 
 ##### Arguments
 - `args.email` : The user's email address
@@ -294,7 +294,7 @@ be sent to, and must be set to either `ordrin.PRODUCTION` or `ordrin.TEST`
 
 #### Get All Saved Addresses
 
-    ordrin_api.get_all_saved_addrs(args)
+    ordrin_api.get_all_saved_addrs(args, callback)
 
 ##### Arguments
 - `args.email` : The user's email address
@@ -303,7 +303,7 @@ be sent to, and must be set to either `ordrin.PRODUCTION` or `ordrin.TEST`
 
 #### Get all saved credit cards
 
-    ordrin_api.get_all_saved_ccs(args)
+    ordrin_api.get_all_saved_ccs(args, callback)
 
 ##### Arguments
 - `args.email` : The user's email address
@@ -312,7 +312,7 @@ be sent to, and must be set to either `ordrin.PRODUCTION` or `ordrin.TEST`
 
 #### Get an Order
 
-    ordrin_api.get_order(args)
+    ordrin_api.get_order(args, callback)
 
 ##### Arguments
 - `args.email` : The user's email address
@@ -322,7 +322,7 @@ be sent to, and must be set to either `ordrin.PRODUCTION` or `ordrin.TEST`
 
 #### Get Order History
 
-    ordrin_api.get_order_history(args)
+    ordrin_api.get_order_history(args, callback)
 
 ##### Arguments
 - `args.email` : The user's email address
@@ -331,7 +331,7 @@ be sent to, and must be set to either `ordrin.PRODUCTION` or `ordrin.TEST`
 
 #### Get a single saved address
 
-    ordrin_api.get_saved_addr(args)
+    ordrin_api.get_saved_addr(args, callback)
 
 ##### Arguments
 - `args.email` : The user's email address
@@ -341,7 +341,7 @@ be sent to, and must be set to either `ordrin.PRODUCTION` or `ordrin.TEST`
 
 #### Get a single saved credit card
 
-    ordrin_api.get_saved_cc(args)
+    ordrin_api.get_saved_cc(args, callback)
 
 ##### Arguments
 - `args.email` : The user's email address
