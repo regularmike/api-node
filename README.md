@@ -56,7 +56,7 @@ fails, then `error` will be an `Error` object; otherwise it will be falsy. The
 
 ```js
 var ordrin = require("ordrin-api");
-ordrin_api = new  ordrin.APIs(api_key, servers);
+var ordrin_api = new  ordrin.APIs(api_key, servers);
 ```
 
 In the initializer, the second argument sets the servers that API requests will

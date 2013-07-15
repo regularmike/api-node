@@ -58,6 +58,8 @@
               data : data,
               headers : headers
             });
+          } else {
+            callback(null, res.body);
           }
         } else {
           callback(new Error(res.error));
