@@ -9,17 +9,17 @@ See full API documentation at http://hackfood.ordr.in
  - [Usage](#usage)
    - [Initialization](#initialization)
    
-   - [Order Endpoints](#order-api-reference)
+   - [Order Endpoints](#order-endpoints-api-reference)
      - [Guest Order](#guest-order-api-reference) (`order_guest`)
      - [User Order](#user-order-api-reference) (`order_user`)
      
-   - [Restaurant Endpoints](#restaurant-api-reference)
+   - [Restaurant Endpoints](#restaurant-endpoints-api-reference)
      - [Delivery Check](#delivery-check-api-reference) (`delivery_check`)
      - [Delivery List](#delivery-list-api-reference) (`delivery_list`)
      - [Fee](#fee-api-reference) (`fee`)
      - [Restaurant Details](#restaurant-details-api-reference) (`restaurant_details`)
      
-   - [User Endpoints](#user-api-reference)
+   - [User Endpoints](#user-endpoints-api-reference)
      - [Change Password](#change-password-api-reference) (`change_password`)
      - [Create Account](#create-account-api-reference) (`create_account`)
      - [Create Address](#create-address-api-reference) (`create_addr`)
