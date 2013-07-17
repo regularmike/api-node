@@ -105,6 +105,17 @@
         }
         console.log(response);
       });
+
+      ordrin_api.create_account({email:email,
+                                 pw:password,
+                                 first_name:first_name,
+                                 last_name:last_name},
+                                function(err, login_resp){
+                                  if(err){
+                                    console.log(err);
+                                  }
+                                  console.log(login_resp);
+                                });
     });
   });
 }());
