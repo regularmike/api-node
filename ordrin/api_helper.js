@@ -62,7 +62,7 @@
             callback(null, res.body);
           }
         } else {
-          callback(new Error(res.error));
+          callback({msg:res.error});
         }
       });
     };
@@ -71,8 +71,6 @@
       var data, validation, arg_dict, data, tmpl, uri, login;
       var endpoint_data = ENDPOINT_INFO[endpoint_group][endpoint_name];
       var value_mutators = {};
-      console.log(kwargs);
-      console.log(endpoint_data);
       _.each(endpoint_data.properties, function(info, name){
         if(_.has(info, 'mutator')){
           value_mutators[name] = mutate[info.mutator];
@@ -113,7 +111,7 @@
       uri = tmpl(arg_dict);
       if(endpoint_data.meta.userAuth){
         if(!(_.has(kwargs, 'email') && _.has(kwargs, 'current_password'))){
-          callback(new Error("Authenticated request requires arguments 'email' and 'current_password'"));
+          callback({msg:"Authenticated request requires arguments 'email' and 'current_password'"});
           return;
         }
         login = {email : kwargs.email, password : mutate.sha256(kwargs.current_password)};
