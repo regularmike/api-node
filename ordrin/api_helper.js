@@ -62,7 +62,7 @@
             callback(null, res.body);
           }
         } else {
-          callback({msg:res.error});
+          callback({msg:res.error, body:res.body});
         }
       });
     };

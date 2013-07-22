@@ -101,7 +101,7 @@
                       delivery_date : "ASAP"})
       ordrin_api.order_guest(data, function(err, response){
         if(err){
-          throw err;
+          console.log(err);
         }
         console.log(response);
       });
@@ -114,7 +114,12 @@
                                   if(err){
                                     console.log(err);
                                   }
-                                  console.log(login_resp);
+                                  ordrin_api.get_account_info(login, function(err, acc_info){
+                                    if(err){
+                                      console.log(err);
+                                    }
+                                    console.log(acc_info);
+                                  });
                                 });
     });
   });
