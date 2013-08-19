@@ -38,6 +38,9 @@
       var full_url, partial, hash, headers;
       full_url = base_url+uri;
       headers = {"X-NAAMA-CLIENT-AUTHENTICATION" : 'id="'+api_key+'", version="1"'};
+      if(method === "DELETE"){
+        headers["Content-Length"] = "0"
+      }
       partial = request(method, full_url);
       if(login){
         hash = crypto.createHash("SHA256");
@@ -50,7 +53,9 @@
       }
       partial.end(function(res){
         if(res.ok){
-          if(return_request_info){
+          if(res.body._error){
+            callback({msg:res.body.msg, text:res.body.text});
+          } else if(return_request_info){
             callback(null, res.body, {
               host : base_url,
               uri : uri,
@@ -94,7 +99,11 @@
       }
       validation = jayschema.validate(kwargs, endpoint_data);
       if(!_.isEmpty(validation)){
-        callback({msg : validation});
+        var msg = "";
+        _.each(validation, function(val){
+          msg += "Error at "+val.instanceContext+"."+val.constraintName+": got "+val.testedValue+", expected "+val.constraintValue+"\n";
+        });
+        callback({msg : msg});
         return;
       }
       arg_dict = _.object(_.map(url_params, function(name){

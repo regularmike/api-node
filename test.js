@@ -1,126 +1,168 @@
 (function(){
   "use strict";
-
+  
   var _ = require("underscore");
+  var fs = require("fs");
+  var JaySchema = require("jayschema");
+  var jayschema = new JaySchema();
+  
+  exports.setUp = function(callback){
+    var ordrin = require("./");
+    this.ordrin_api = new ordrin.APIs("2HGAzwbK5IWNJPRN_c-kvbqtfGhS-k2a6p-1Zg2iNN4");
+    callback();
+  };
 
-  var ordrin = require("./");
-  var api_key = "2HGAzwbK5IWNJPRN_c-kvbqtfGhS-k2a6p-1Zg2iNN4";
-  var ordrin_api = new ordrin.APIs(api_key);
-
-  var data = {
-    addr : "900 Broadway",
-    city : "New York",
-    zip : "10003",
-    state : "NY",
-    phone : "555-555-5555"
-  }
-  var addr = "900 Broadway";
-  var city = "New York";
-  var addr_zip = "10003";
-
-  var address = {'addr' : addr,
-                 'city' : city,
-                 'state' : 'NY',
-                 'zip' : addr_zip,
-                 'phone' : '555-555-5555'};
-  var address_nick = 'addr1';
-
-  var first_name = 'Test';
-  var last_name = 'User';
-  var credit_card = {'card_name' : first_name+' '+last_name,
-                 'card_expiry' : '01/2016',
-                 'card_number' : '4111111111111111',
-                 'card_cvc' : '123',
-                 'card_bill_addr' : address["addr"],
-                 'card_bill_city' : address["city"],
-                 'card_bill_state' : address["state"],
-                 'card_bill_zip' : address["zip"],
-                 'card_bill_phone' : address["phone"]};
-  var credit_card_save = {'card_expiry' : '01/2016',
-                      'card_number' : '4111111111111111',
-                      'card_cvc' : '123',
-                      'bill_addr' : addr,
-                      'bill_city' : city,
-                      'bill_state' : address["state"],
-                      'bill_zip' : addr_zip,
-                      'bill_phone' : address["phone"]};
-  var credit_card_nick = 'cc1';
-
-  var unique_id = Date.now();
-  var email = 'node+'+unique_id+'@ordr.in';
-  var password = 'password';
-  var login = {'email' : email,
-               'current_password' : password};
-  var alt_first_name = 'Example';
-  var alt_email = 'node+'+unique_id+'alt@ordr.in';
-  var alt_login = {'email' : alt_email,
-                   'current_password' : password};
-  var new_password = 'password1';
-
-  function find_item_to_order(item_list){
-    var result = null;
-    _.each(item_list, function(item){
-      if(item.is_orderable){
-        if(parseFloat(item.price)>=5.00){
-          result = item.id;
+  function getTrayItem(menu){
+    var item;
+    _.each(menu, function(category){
+      var result;
+      if(category.is_orderable == 1){
+        if(parseFloat(category.price)>=5){
+          item = category.id;
         }
-      } else {
-        if(_.has(item, "children")){
-          var item_id = find_item_to_order(item.children);
-          if(item_id != null){
-            result = item_id;
-          }
+      } else if(category.children){
+        result = getTrayItem(category.children);
+        if(result){
+          item = result;
         }
       }
     });
-    return result;
+    return item;
   }
 
-  ordrin_api.delivery_list(_.extend(_.clone(address), {datetime:"ASAP"}), function(err, delivery_list){
-    if(err){
-      console.log(err);
-      return;
+  var json_data = JSON.parse(fs.readFileSync('./tests.json'));
+
+  var test_cases = json_data.tests;
+  var data = {};
+  data.funcs = {
+    gen_email : function(){
+      return "test_node+" + Date.now() + "@ordr.in";
+    },
+    gen_tray : function(menu){
+      return getTrayItem(menu).toString() + "/10";
     }
-    var restaurant_id = delivery_list[0].id.toString();
-    ordrin_api.restaurant_details({rid : restaurant_id}, function(err, detail){
-      if(err){
-        console.log(err);
-        return;
+  };
+  data.output = {};
+  data.data = json_data.data;
+  _.each(data.data, function(group){
+    _.each(group, function(value, name){
+      if(_.isArray(value)){
+        group[name] = data.funcs[value[0]](null, value.slice(1));
+        console.log(name + ": " + group[name]);
       }
-      var item_id = find_item_to_order(detail.menu);
-      var tray = item_id+"/10";
-      var data = {}
-      _.extend(data, address);
-      _.extend(data, credit_card);
-      _.extend(data, {rid : restaurant_id,
-                      em : email,
-                      tray : tray,
-                      tip : "5.00",
-                      first_name : first_name,
-                      last_name : last_name,
-                      delivery_date : "ASAP"})
-      ordrin_api.order_guest(data, function(err, response){
-        if(err){
-          console.log(err);
-        }
-        console.log(response);
-      });
-
-      ordrin_api.create_account({email:email,
-                                 pw:password,
-                                 first_name:first_name,
-                                 last_name:last_name},
-                                function(err, login_resp){
-                                  if(err){
-                                    console.log(err);
-                                  }
-                                  ordrin_api.get_account_info(login, function(err, acc_info){
-                                    if(err){
-                                      console.log(err);
-                                    }
-                                    console.log(acc_info);
-                                  });
-                                });
     });
+  });
+
+  function deepGet(obj, route){
+    route = route.replace(/\[[\'\"]?(\w+)[\'\"]?\]/, '.$1');
+    _.each(route.split('.'), function(word){
+      obj = obj[word];
+    });
+    return obj;
+  };
+
+  function fixValue(value){
+    var pointer;
+    if(_.isArray(value)){
+      pointer = deepGet(data, value[0]);
+      if(_.isFunction(pointer)){
+        value = pointer.apply(null, _.map(value.slice(1), fixValue));
+      } else {
+        value = pointer;
+      }
+    }
+    return value;
+  };
+
+  function fixInput(input){
+    _.each(input, function(value, name){
+      input[name] = fixValue(value).toString();
+    });
+    return input;
+  };
+
+  function isSubset(sub, set){
+    return _.all(sub, _.partial(_.contains, set));
+  };
+
+  function getTestOrder(test_cases, targets){
+    var tests, queue, order, item, to_run;
+    tests = _.object(_.map(test_cases, function(test){
+      return [test.name, test];
+    }));
+    if(_.isUndefined(targets)){
+      queue = _.pluck(test_cases, "name");
+      order = _.filter(queue, function(name){
+        return _.isEmpty(tests[name].dependencies);
+      });
+      queue = _.difference(queue, order);
+      while(!_.isEmpty(queue)){
+        order = order.concat(_.filter(queue, function(name){
+          return isSubset(tests[name].dependencies, order) && isSubset(tests[name].soft_dependencies, order);
+        }));
+        if(_.isEmpty(_.intersection(queue, order))){
+          throw new Error("Dependency cycle detected: " + JSON.stringify(queue)+";"+JSON.stringify(order));
+        }
+        queue = _.difference(queue, order);
+      }
+      return order;
+    } else {
+      to_run = targets;
+      queue = _.filter(_.flatten(_.pluck(_.values(_.pick(tests, targets)), "dependencies")), _.isString);
+      console.log(queue);
+      while(!_.isEmpty(queue)){
+        item = queue.shift();
+        to_run.push(item);
+        queue.push.apply(queue, tests[item].dependencies);
+      }
+      return _.filter(getTestOrder(test_cases), _.partial(_.contains, to_run));
+    }
+  };
+  var tests = _.object(_.map(test_cases, function(test){
+    return [test.name, test];
+  }));
+  var order;
+  if(process.env.ORDRIN_NODE_TEST_NAMES){
+    order = getTestOrder(test_cases, process.env.ORDRIN_NODE_TEST_NAMES.split(","));
+  } else if(process.env.ORDRIN_NODE_TEST_ENDPOINT){
+    order = getTestOrder(test_cases, _.pluck(_.where(test_cases, {"function" : process.env.ORDRIN_NODE_TEST_ENDPOINT}), "name"));
+  } else if(process.env.ORDRIN_NODE_TEST_GROUP){
+    order = getTestOrder(test_cases, _.pluck(_.where(test_cases, {"group" : process.env.ORDRIN_NODE_TEST_GROUP}), "name"));
+  } else {
+    order = getTestOrder(test_cases);
+  }
+  _.each(order, function(test_name){
+    var test_case = tests[test_name];
+    exports["test_"+test_case.name] = function(test){
+      test.expect(3);
+      this.ordrin_api[test_case["function"]](fixInput(test_case.input), function(error, output){
+        data.output[test_case.name] = output;
+        if(test_case.output.success === null){
+          if(error){
+            var validation = jayschema.validate(error, test_case.output.schema);
+            test.ok(_.isEmpty(validation), test_case["function"]+" error different from expected: " + JSON.stringify(validation));
+            test.ok((new RegExp(test_case.output.regex)).test(JSON.stringify(error)), "Did not match regex");
+          } else {
+            var validation = jayschema.validate(output, test_case.output.schema);
+            test.ok(_.isEmpty(validation), test_case["function"]+" returned improperly formatted output: "+JSON.stringify(validation));
+            test.ok((new RegExp(test_case.output.regex)).test(JSON.stringify(output)), "Did not match regex");
+          }
+          test.ok(true, "I needed a third test");
+        } else if(test_case.output.success){
+          test.ok(!error, test_case["function"]+" failed with error "+JSON.stringify(error));
+          if(!error){
+            var validation = jayschema.validate(output, test_case.output.schema);
+            test.ok(_.isEmpty(validation), test_case["function"]+" returned improperly formatted output: "+JSON.stringify(validation));
+            test.ok((new RegExp(test_case.output.regex)).test(JSON.stringify(output)), "Did not match regex");
+          }
+        } else {
+          test.ok(error, test_case["function"]+" with input "+JSON.stringify(test_case.input)+" succeeded unexpectedly.");
+          var validation = jayschema.validate(error, test_case.output.schema);
+          test.ok(_.isEmpty(validation), test_case["function"]+" error different from expected: " + JSON.stringify(validation));
+          test.ok((new RegExp(test_case.output.regex)).test(JSON.stringify(error)), "Did not match regex");
+        }
+        test.done();
+      });
+    };
   });
 }());
