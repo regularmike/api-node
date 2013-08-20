@@ -40,6 +40,18 @@
     },
     gen_tray : function(menu){
       return getTrayItem(menu).toString() + "/10";
+    },
+    tomorrow : function(){
+      var date = new Date(Date.now() + 86400000);
+      var monthNum = (date.getMonth()+1).toString();
+      if(monthNum.length == 1){
+        monthNum = "0" + monthNum;
+      }
+      var dateNum = date.getDate().toString();
+      if(dateNum.length == 1){
+        dateNum = "0" + dateNum;
+      }
+      return monthNum + "-" + dateNum;
     }
   };
   data.output = {};
@@ -141,11 +153,11 @@
           if(error){
             var validation = jayschema.validate(error, test_case.output.schema);
             test.ok(_.isEmpty(validation), test_case["function"]+" error different from expected: " + JSON.stringify(validation));
-            test.ok((new RegExp(test_case.output.regex)).test(JSON.stringify(error)), "Did not match regex");
+            test.ok((new RegExp(test_case.output.success_regex)).test(JSON.stringify(error)), "Did not match regex");
           } else {
             var validation = jayschema.validate(output, test_case.output.schema);
             test.ok(_.isEmpty(validation), test_case["function"]+" returned improperly formatted output: "+JSON.stringify(validation));
-            test.ok((new RegExp(test_case.output.regex)).test(JSON.stringify(output)), "Did not match regex");
+            test.ok((new RegExp(test_case.output.fail_regex)).test(JSON.stringify(output)), "Did not match regex");
           }
           test.ok(true, "I needed a third test");
         } else if(test_case.output.success){
@@ -153,13 +165,13 @@
           if(!error){
             var validation = jayschema.validate(output, test_case.output.schema);
             test.ok(_.isEmpty(validation), test_case["function"]+" returned improperly formatted output: "+JSON.stringify(validation));
-            test.ok((new RegExp(test_case.output.regex)).test(JSON.stringify(output)), "Did not match regex");
+            test.ok((new RegExp(test_case.output.success_regex)).test(JSON.stringify(output)), "Did not match regex");
           }
         } else {
           test.ok(error, test_case["function"]+" with input "+JSON.stringify(test_case.input)+" succeeded unexpectedly.");
           var validation = jayschema.validate(error, test_case.output.schema);
           test.ok(_.isEmpty(validation), test_case["function"]+" error different from expected: " + JSON.stringify(validation));
-          test.ok((new RegExp(test_case.output.regex)).test(JSON.stringify(error)), "Did not match regex");
+          test.ok((new RegExp(test_case.output.fail_regex)).test(JSON.stringify(error)), "Did not match regex");
         }
         test.done();
       });

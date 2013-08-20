@@ -1219,7 +1219,7 @@
           "data.user1.password"
         ],
         "oid": [
-          "output.user_order_success.refnum"
+          "output.user_order_tomorrow_success.refnum"
         ]
       },
       "output": {
@@ -1322,7 +1322,7 @@
         }
       },
       "dependencies": [
-        "user_order_success"
+        "user_order_tomorrow_success"
       ]
     },
     {
@@ -1440,7 +1440,8 @@
         }
       },
       "dependencies": [
-        "user_order_success"
+        "user_order_success",
+        "user_order_tomorrow_success"
       ]
     },
     {
@@ -1530,6 +1531,81 @@
       },
       "output": {
         "success": null,
+        "schema": {
+          "type": "object",
+          "properties": {
+            "refnum": {
+              "type": "string",
+              "description": "Ordr.in's unique reference String for this order. Only exists if the order was successful."
+            },
+            "cs_order_id": {
+              "type": "string",
+              "description": "(Optional) Our delivery partener's reference number for this order."
+            },
+            "text": {
+              "type": "string",
+              "description": "This is an end user visible error or success message message."
+            },
+            "_error": {
+              "type": "integer",
+              "description": "If there was an error, this is set to 1, otherwise it's 0"
+            },
+            "msg": {
+              "type": "string",
+              "description": "Error details"
+            }
+          },
+          "description": "An object with an error code and possible message"
+        }
+      },
+      "dependencies": [
+        "delivery_list_success",
+        "restaurant_details_success",
+        "create_user_success",
+        "create_addr_success",
+        "create_cc_success"
+      ]
+    },
+    {
+      "name": "user_order_tomorrow_success",
+      "function": "order_user",
+      "group": "order",
+      "input": {
+        "rid": [
+          "output.delivery_list_success.0.id"
+        ],
+        "tray": [
+          "funcs.gen_tray",
+          [
+            "output.restaurant_details_success.menu"
+          ]
+        ],
+        "tip": "10.01",
+        "first_name": [
+          "data.user1.first_name"
+        ],
+        "last_name": [
+          "data.user1.last_name"
+        ],
+        "email": [
+          "data.user1.email"
+        ],
+        "current_password": [
+          "data.user1.password"
+        ],
+        "nick": [
+          "data.address.nick"
+        ],
+        "card_nick": [
+          "data.cc.nick"
+        ],
+        "delivery_date": [
+          "funcs.tomorrow"
+        ],
+        "delivery_time": "12:00"
+      },
+      "output": {
+        "success": true,
         "schema": {
           "type": "object",
           "properties": {
