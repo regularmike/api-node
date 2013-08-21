@@ -1326,6 +1326,29 @@
       ]
     },
     {
+      "name": "get_empty_order_history_success",
+      "function": "get_order_history",
+      "group": "user",
+      "input": {
+        "email": [
+          "data.user1.email"
+        ],
+        "current_password": [
+          "data.user1.password"
+        ]
+      },
+      "output": {
+        "success": true,
+        "schema": {
+          "type": "array",
+          "maxLength": 0
+        }
+      },
+      "dependencies": [
+        "create_user_success"
+      ]
+    },
+    {
       "name": "get_order_history_success",
       "function": "get_order_history",
       "group": "user",
@@ -1564,6 +1587,9 @@
         "create_user_success",
         "create_addr_success",
         "create_cc_success"
+      ],
+      "soft_dependencies": [
+        "get_empty_order_history_success"
       ]
     },
     {
@@ -1639,6 +1665,9 @@
         "create_user_success",
         "create_addr_success",
         "create_cc_success"
+      ],
+      "soft_dependencies": [
+        "get_empty_order_history_success"
       ]
     },
     {
