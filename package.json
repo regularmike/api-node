@@ -1,6 +1,6 @@
 {
   "name" : "ordrin-api",
-  "version" : "0.3.1",
+  "version" : "1.0.0",
   "private" : false,
   "description" : "A node library for the ordr.in food ordering API",
   "dependencies" : {
@@ -8,7 +8,7 @@
     "superagent" : "0.15.x",
     "underscore" : "1.5.x"
   },
-  "dev-dependencies" : {
+  "devDependencies" : {
     "nodeunit" : "0.8.x",
     "optimist" : "0.6.x"
   },
