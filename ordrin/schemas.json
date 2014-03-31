@@ -111,8 +111,8 @@
         "card_number": {
           "type": "string",
           "description": "Credit card number",
-          "formatDescription": "16 digits",
-          "pattern": "^[0-9]{16}$",
+          "formatDescription": "15 or 16 digits",
+          "pattern": "^[0-9]{15,16}$",
           "default_value": "4111111111111111"
         },
         "card_cvc": {
