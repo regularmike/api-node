@@ -24,7 +24,12 @@
     if(_.isUndefined(servers)){
       servers = TEST;
     }
-    if(servers === PRODUCTION){
+
+    if (typeof servers === "object") {                                                               
+      urls.restaurants = servers.restaurants;
+      urls.user = servers.user;
+      urls.order = servers.order;
+    } else if(servers === PRODUCTION){
       urls.restaurant = "https://r.ordr.in";
       urls.user = "https://u.ordr.in";
       urls.order = "https://o.ordr.in";
