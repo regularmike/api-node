@@ -26,7 +26,7 @@
     }
 
     if (typeof servers === "object") {                                                               
-      urls.restaurants = servers.restaurants;
+      urls.restaurant = servers.restaurants;
       urls.user = servers.user;
       urls.order = servers.order;
     } else if(servers === PRODUCTION){
